@@ -1,0 +1,12 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+table{width:100%;border-collapse:collapse}td,th{border:1px solid #333;padding:4px;font-size:12px}
+</style></head><body>
+<h3>Employee Report</h3>
+<table>
+<tr><th>HRMS</th><th>Name</th><th>Designation</th><th>Branch</th><th>College</th><th>Posting</th></tr>
+{% for e in qs %}
+<tr><td>{{ e.hrms_id }}</td><td>{{ e.name }}</td><td>{{ e.current_designation }}</td>
+<td>{{ e.branch }}</td><td>{{ e.college_name }}</td><td>{{ e.present_posting }}</td></tr>
+{% endfor %}
+</table>
+</body></html>

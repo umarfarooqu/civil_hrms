@@ -1,0 +1,205 @@
+{% extends "portal_base.html" %}
+{% block title %}{{ title }} · Employee Portal{% endblock title %}
+
+{% block portal_content %}
+<div class="space-y-6">
+
+  <!-- Header (no action buttons here) -->
+  <h2 class="text-2xl font-semibold text-maroon-800">{{ title }}</h2>
+
+  <!-- Formset -->
+  <form id="formset-form" method="post" enctype="multipart/form-data" class="space-y-4">
+    {% csrf_token %}
+    {{ formset.management_form }}
+
+    {% if formset.non_form_errors %}
+      <div class="rounded-xl p-3 bg-red-50 border border-red-200 text-red-800">
+        {% for e in formset.non_form_errors %}
+          <div>{{ e }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% for form in formset %}
+      {# hidden fields (id etc.) #}
+      {% for h in form.hidden_fields %}{{ h }}{% endfor %}
+
+      <div class="card">
+        <div class="card-header flex items-center justify-between p-4 border-b">
+          <div class="font-semibold text-gray-800">Entry #{{ forloop.counter }}</div>
+
+          {# Delete toggle only in header #}
+          {% if formset.can_delete and form.DELETE %}
+            <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+              {{ form.DELETE }}
+              Delete
+            </label>
+          {% endif %}
+        </div>
+
+        <div class="card-body p-4 space-y-3">
+          {% if form.non_field_errors %}
+            <div class="rounded-lg p-2 bg-red-50 border border-red-200 text-red-700 text-sm">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          <div class="grid md:grid-cols-2 gap-4">
+            {% for field in form.visible_fields %}
+              {% if field.name != "DELETE" %}
+                <div data-field-wrapper>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">
+                    {{ field.label }}
+                    {% if field.field.required %}<span class="text-red-600">*</span>{% endif %}
+                  </label>
+                  {{ field }}
+                  {% if field.help_text %}
+                    <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
+                  {% endif %}
+                  {% if field.errors %}
+                    <p class="text-xs text-red-600 mt-1">{{ field.errors|striptags }}</p>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+    <!-- Sticky bottom bar (ONLY Save here) -->
+    <div class="sticky bottom-0 z-10 bg-white/80 backdrop-blur border-t border-gray-200">
+      <div class="max-w-6xl mx-auto flex items-center justify-end gap-2 p-3">
+        <button id="add-row-bottom" type="button"
+                class="px-4 py-2 rounded-xl font-medium border border-maroon-200 text-maroon-800 bg-maroon-50 hover:bg-maroon-100 focus:outline-none focus:ring-2 focus:ring-maroon-300">
+          Add another
+        </button>
+        <button type="submit"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold bg-gradient-to-r from-maroon-700 to-maroon-800 text-white shadow-lg hover:from-maroon-800 hover:to-maroon-900 focus:outline-none focus:ring-2 focus:ring-maroon-400">
+          Save
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Approved list -->
+  {% if approved_qs %}
+    <div class="card">
+      <div class="card-header p-4 border-b">
+        <div class="text-gray-800 font-semibold">Approved (read-only)</div>
+        <div class="text-xs text-gray-500 mt-1">These entries are already approved and cannot be edited.</div>
+      </div>
+      <div class="card-body p-4">
+        <ul class="space-y-2">
+          {% for r in approved_qs %}
+            <li class="flex items-center justify-between p-2 rounded-lg border border-gray-100 bg-gray-50">
+              <span class="text-sm">{{ r }}</span>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-maroon-50 text-maroon-800 border border-maroon-200">APPROVED</span>
+            </li>
+          {% empty %}
+            <li class="text-sm text-gray-500">No approved records.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+  // ---- Input styling & filled highlight ----
+  function isTextLike(el) {
+    if (el.tagName === 'TEXTAREA') return true;
+    if (el.tagName === 'SELECT') return true;
+    if (el.tagName !== 'INPUT') return false;
+    const t = (el.getAttribute('type') || 'text').toLowerCase();
+    return [
+      'text','email','number','url','tel','password','search',
+      'date','time','datetime-local','month','week'
+    ].includes(t);
+  }
+  function styleField(el) {
+    if (isTextLike(el)) {
+      el.classList.add(
+        'w-full','rounded-lg','border','border-gray-300','px-3','py-2',
+        'focus:outline-none','focus:ring-2','focus:ring-maroon-500'
+      );
+    }
+  }
+  function highlightWrapper(el) {
+    const wrap = el.closest('[data-field-wrapper]');
+    if (!wrap) return;
+    const val = (el.value || '').trim();
+    if (val) {
+      wrap.classList.add('ring-1','ring-maroon-500','bg-maroon-50/30','rounded-lg','p-2');
+      el.classList.add('border-maroon-500');
+    } else {
+      wrap.classList.remove('ring-1','ring-maroon-500','bg-maroon-50/30','rounded-lg','p-2');
+      el.classList.remove('border-maroon-500');
+    }
+  }
+  function initFieldStyles(root) {
+    const scope = root || document;
+    scope.querySelectorAll('input:not([type="hidden"]), select, textarea').forEach(el => {
+      styleField(el);
+      highlightWrapper(el);
+      el.addEventListener('input', () => highlightWrapper(el));
+      el.addEventListener('change', () => highlightWrapper(el));
+    });
+  }
+
+  // ---- Add another row using empty_form ----
+  (function() {
+    const form = document.getElementById('formset-form');
+    if (!form) return;
+    const addBot = document.getElementById('add-row-bottom');
+    const totalInput = form.querySelector('input[name$="-TOTAL_FORMS"]');
+
+    const tpl = document.createElement('template');
+    tpl.innerHTML = `
+      <div data-empty-form class="card hidden">
+        <div class="card-header flex items-center justify-between p-4 border-b">
+          <div class="font-semibold text-gray-800">Entry #__NUM__</div>
+        </div>
+        <div class="card-body p-4 space-y-3">
+          <div class="grid md:grid-cols-2 gap-4">
+            {% with form=formset.empty_form %}
+              {% for h in form.hidden_fields %}{{ h.as_widget }}{% endfor %}
+              {% for field in form.visible_fields %}
+                {% if field.name != "DELETE" %}
+                  <div data-field-wrapper>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                      {{ field.label }}
+                      {% if field.field.required %}<span class="text-red-600">*</span>{% endif %}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                      <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            {% endwith %}
+          </div>
+        </div>
+      </div>
+    `.trim();
+
+    function addRow() {
+      const count = parseInt(totalInput.value, 10);
+      const clone = tpl.content.firstElementChild.cloneNode(true);
+      clone.innerHTML = clone.innerHTML.replaceAll(/__prefix__/g, count);
+      clone.classList.remove('hidden');
+      clone.querySelector('.card-header .font-semibold').textContent = `Entry #${count + 1}`;
+      form.appendChild(clone);
+      totalInput.value = count + 1;
+      initFieldStyles(clone);
+      clone.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    addBot && addBot.addEventListener('click', addRow);
+    initFieldStyles(document);
+  })();
+</script>
+{% endblock extra_js %}
+{% endblock portal_content %}

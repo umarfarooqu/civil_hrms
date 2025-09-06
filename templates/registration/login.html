@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{% if request.GET.lang == 'hi' %}hi{% else %}en{% endif %}">
+<head>
+  <meta charset="UTF-8" />
+  <title>
+    {% if request.GET.lang == 'hi' %}
+      डीएसटीटीई सेवा इतिहास पोर्टल – लॉगिन
+    {% else %}
+      DSTTE Seva Itihas Portal – Login
+    {% endif %}
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: {
+              50: '#fdf2f2',
+              100: '#fde8e8',
+              200: '#fbd5d5',
+              300: '#f8b4b4',
+              400: '#f98080',
+              500: '#f05252',
+              600: '#e02424',
+              700: '#800000',
+              800: '#660000',
+              900: '#4d0000'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gradient-to-r from-maroon-50 to-white min-h-screen flex items-center justify-center">
+  <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 border border-maroon-700">
+
+    <!-- Language toggle -->
+    <div class="flex justify-end mb-2">
+      {% if request.GET.lang == 'hi' %}
+        <a href="?lang=en" class="text-sm text-maroon-700 hover:underline">English</a>
+      {% else %}
+        <a href="?lang=hi" class="text-sm text-maroon-700 hover:underline">हिन्दी</a>
+      {% endif %}
+    </div>
+
+    <!-- Header -->
+    <div class="flex flex-col items-center mb-6 text-center">
+      <img src="{% static 'images/biharlogo.png' %}" alt="Bihar Govt Logo" class="h-20 mb-2" />
+      <h1 class="text-xl font-bold text-maroon-800">
+        {% if request.GET.lang == 'hi' %}
+          विज्ञान, प्रौद्योगिकी एवं तकनीकी शिक्षा विभाग<br />बिहार सरकार
+        {% else %}
+          Department of Science, Technology & Technical Education<br />Government of Bihar
+        {% endif %}
+      </h1>
+      <p class="text-sm text-gray-600 mt-1">
+        {% if request.GET.lang == 'hi' %}सेवा इतिहास पोर्टल{% else %}Seva Itihas Portal{% endif %}
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form method="post" action="{% url 'login' %}" class="space-y-4">
+      {% csrf_token %}
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+      {% if form and form.non_field_errors %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded text-sm">
+          {% if request.GET.lang == 'hi' %}
+            अमान्य एचआरएमएस आईडी/उपयोगकर्ता नाम या पासवर्ड। कृपया पुनः प्रयास करें।
+          {% else %}
+            Invalid HRMS ID/Username or Password. Please try again.
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <!-- Username -->
+      <div>
+        <label class="block text-gray-700 text-sm mb-1">
+          {% if request.GET.lang == 'hi' %}एचआरएमएस आईडी / उपयोगकर्ता नाम{% else %}HRMS ID / Username{% endif %}
+        </label>
+        <input
+          type="text"
+          name="username"
+          autocomplete="username"
+          required
+          placeholder="10328222"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-maroon-700"
+        />
+        {% if form and form.username and form.username.errors %}
+          <div class="text-xs text-red-600 mt-1">{{ form.username.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Password + show toggle -->
+      <div>
+        <label class="block text-gray-700 text-sm mb-1">
+          {% if request.GET.lang == 'hi' %}पासवर्ड{% else %}Password{% endif %}
+        </label>
+        <div class="relative">
+          <input
+            id="password"
+            type="password"
+            name="password"
+            autocomplete="current-password"
+            required
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 pr-12 focus:outline-none focus:ring-2 focus:ring-maroon-700"
+          />
+          <button type="button"
+                  id="togglePwd"
+                  class="absolute inset-y-0 right-0 px-3 text-sm text-gray-600 hover:text-gray-800">
+            {% if request.GET.lang == 'hi' %}दिखाएँ{% else %}Show{% endif %}
+          </button>
+        </div>
+        {% if form and form.password and form.password.errors %}
+          <div class="text-xs text-red-600 mt-1">{{ form.password.errors }}</div>
+        {% endif %}
+        <p class="text-xs text-gray-500 mt-1">
+          {% if request.GET.lang == 'hi' %}
+            डिफ़ॉल्ट पासवर्ड: DOB को <b>DDMMYYYY</b> में; यदि DOB नहीं है, तो <b>Ngp@HRMS के अंतिम 4 अंक</b>.
+          {% else %}
+            Default password: DOB as <b>DDMMYYYY</b>; if no DOB, use <b>Ngp@last4(HRMS)</b>.
+          {% endif %}
+        </p>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit"
+              class="w-full bg-maroon-700 hover:bg-maroon-800 text-white py-2 rounded-lg font-semibold transition">
+        {% if request.GET.lang == 'hi' %}लॉगिन{% else %}Login{% endif %}
+      </button>
+    </form>
+
+    <!-- Footer -->
+    <div class="mt-6 text-center text-sm text-gray-600">
+      <a href="https://state.bihar.gov.in/dst/CitizenHome.html" class="text-maroon-700 hover:underline">
+        {% if request.GET.lang == 'hi' %}डीएसटी बिहार देखें{% else %}Visit DST Bihar{% endif %}
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Simple show/hide password
+    const btn = document.getElementById('togglePwd');
+    const pwd = document.getElementById('password');
+    if (btn && pwd) {
+      btn.addEventListener('click', function() {
+        const show = pwd.type === 'password';
+        pwd.type = show ? 'text' : 'password';
+        this.textContent = show ? ({% if request.GET.lang == 'hi' %}'छुपाएँ'{% else %}'Hide'{% endif %}) : ({% if request.GET.lang == 'hi' %}'दिखाएँ'{% else %}'Show'{% endif %});
+      });
+    }
+  </script>
+</body>
+</html>

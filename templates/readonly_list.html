@@ -1,0 +1,20 @@
+{% extends "portal_base.html" %}
+{% block portal_content %}
+<div class="rounded-2xl bg-white shadow-card border border-maroon-100">
+  <div class="px-5 py-4 border-b bg-maroon-700 text-white rounded-t-2xl">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-semibold">{{ title }}</h2>
+      <a href="/hr/portal/" class="text-white/90 hover:text-white text-sm">← Back to Portal</a>
+    </div>
+  </div>
+  <div class="p-5">
+    <ul class="space-y-2 text-sm">
+      {% for r in rows %}
+        <li class="p-3 rounded-lg border bg-white hover:bg-gray-50">{{ r }}</li>
+      {% empty %}
+        <li class="text-gray-500">No records.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+
+MIGRATION STEPS
+---------------
+1) python manage.py makemigrations hr
+2) python manage.py migrate
+
+HOW TO ENABLE MODULES FOR AN EMPLOYEE
+-------------------------------------
+- In Django admin, open the Employee record and create/edit "Self edit permission".
+- Toggle the modules (education, postings, ...).
+
+SECURITY
+--------
+- Search and export views are restricted to staff/superusers.
+- Employee portal queries are scoped to the logged-in employee only.

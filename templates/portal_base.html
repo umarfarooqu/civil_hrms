@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>{% block title %}Employee Portal{% endblock title %}</title>
+
+  <link rel="stylesheet" href="{% static 'css/portal.css' %}"/>
+
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: {
+              50:"#fdf2f2",100:"#fde8e8",200:"#fbd5d5",300:"#f8b4b4",
+              400:"#f98080",500:"#f05252",600:"#e02424",700:"#800000",
+              800:"#660000",900:"#4d0000"
+            }
+          },
+          boxShadow: {
+            card: "0 6px 18px rgba(0,0,0,0.08)"
+          },
+          borderRadius: { xl: "1rem" }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <!-- Top bar -->
+  <header class="bg-maroon-700 text-white">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
+      <div class="font-semibold tracking-wide">DSTTE SEVA ITIHAS PORTAL</div>
+      <nav class="ml-auto text-sm">
+        <a href="/hr/portal/" class="hover:underline/80">Home</a>
+        <span class="mx-2 opacity-70">•</span>
+        <a href="/accounts/logout/" class="hover:underline/80">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto py-6 px-4">
+    {% block portal_content %}{% endblock portal_content %}
+  </main>
+
+  <footer class="mt-10 py-6 text-center text-xs text-gray-500">
+    © {{ now|date:"Y" }} DSTTE — Employee Self Service
+  </footer>
+</body>
+</html>

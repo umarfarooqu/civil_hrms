@@ -1,0 +1,96 @@
+/************************************
+Full Maroon Jazzmin Theme
+************************************/
+
+/* ---- Sidebar ---- */
+.main-sidebar {
+  background-color: #800000 !important; /* Maroon */
+  color: #ffffff !important;
+}
+.main-sidebar .brand-link {
+  background-color: #800000 !important;
+  border-bottom: 1px solid #660000 !important;
+  color: #ffffff !important;
+  font-weight: bold;
+}
+.main-sidebar .brand-text {
+  color: #ffffff !important;
+}
+.nav-sidebar .nav-link {
+  color: #f0f0f0 !important;
+}
+.nav-sidebar .nav-link:hover {
+  background-color: #660000 !important;
+  color: #ffffff !important;
+}
+.nav-sidebar .nav-item > .nav-link.active {
+  background-color: #4d0000 !important;
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
+/* ---- Header / Top Navbar ---- */
+.main-header {
+  background-color: #800000 !important;
+  border-bottom: 1px solid #660000 !important;
+  color: #ffffff !important;
+}
+.main-header .nav-link {
+  color: #ffffff !important;
+}
+.main-header .nav-link:hover {
+  background-color: #660000 !important;
+}
+
+/* ---- Buttons ---- */
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-danger,
+.btn-warning {
+  background-color: #800000 !important;
+  border-color: #800000 !important;
+  color: #ffffff !important;
+}
+.btn-primary:hover,
+.btn-success:hover,
+.btn-info:hover,
+.btn-danger:hover,
+.btn-warning:hover {
+  background-color: #660000 !important;
+  border-color: #660000 !important;
+}
+
+/* ---- Login Page ---- */
+.login-page,
+.register-page {
+  background-color: #800000 !important;
+}
+.login-box .card {
+  border: 2px solid #660000 !important;
+  border-radius: 12px !important;
+}
+.login-logo a {
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
+/* ---- Tables / Forms ---- */
+.card {
+  border-radius: 12px !important;
+}
+.table thead th {
+  background-color: #800000 !important;
+  color: #ffffff !important;
+}
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #f9f2f2 !important; /* subtle maroon tint */
+}
+
+/* ---- Footer ---- */
+.main-footer {
+  background-color: #800000 !important;
+  color: #ffffff !important;
+  border-top: 1px solid #660000 !important;
+  text-align: center;
+}

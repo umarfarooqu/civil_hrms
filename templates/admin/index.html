@@ -1,0 +1,21 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+
+{% block content %}
+  {{ block.super }}
+  <div style="margin:20px 0; padding:10px; background:#f5f5f5; border-radius:6px;">
+    <form action="{% url 'set_language' %}" method="post" style="display:inline">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <input type="hidden" name="language" value="en">
+      <button type="submit">English</button>
+    </form>
+    <form action="{% url 'set_language' %}" method="post" style="display:inline">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <input type="hidden" name="language" value="hi">
+      <button type="submit">हिन्दी</button>
+    </form>
+    <span style="margin-left:8px;opacity:.7">Active: {{ request.LANGUAGE_CODE }}</span>
+  </div>
+{% endblock %}

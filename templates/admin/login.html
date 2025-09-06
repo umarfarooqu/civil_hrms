@@ -1,0 +1,117 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ request.GET.lang|default:'en' }}">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+      {% if request.GET.lang == 'hi' %}डीएसटीटीई सेवा इतिहास पोर्टल – लॉगिन{% else %}DSTTE Seva Itihas Portal – Login{% endif %}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Minimal maroon palette + helpers -->
+    <style>
+      :root{
+        --maroon-50:#faf3f4;
+        --maroon-100:#f1dde1;
+        --maroon-600:#8b2635;
+        --maroon-700:#7a1f2b;
+        --maroon-800:#611723;
+      }
+      .from-maroon-50 { --tw-gradient-from: var(--maroon-50) var(--tw-gradient-from-position); --tw-gradient-to: rgb(250 243 244 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--maroon-50), var(--tw-gradient-to); }
+      .to-white       { --tw-gradient-to: #ffffff var(--tw-gradient-to-position); }
+      .text-maroon-700 { color: var(--maroon-700); }
+      .text-maroon-800 { color: var(--maroon-800); }
+      .bg-maroon-700 { background-color: var(--maroon-700); }
+      .hover\:bg-maroon-800:hover { background-color: var(--maroon-800); }
+      .border-maroon-100 { border-color: var(--maroon-100); }
+      .focus-maroon:focus { --tw-ring-color: var(--maroon-600); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; outline: none; box-shadow: 0 0 0 3px var(--maroon-100), 0 0 0 4px var(--maroon-600); border-color: var(--maroon-600); }
+      a.link-maroon { color: var(--maroon-700); }
+      a.link-maroon:hover { text-decoration: underline; color: var(--maroon-800); }
+    </style>
+  </head>
+
+  <body class="bg-gradient-to-r from-maroon-50 to-white min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 border border-maroon-100">
+
+      <!-- Language toggle -->
+      <div class="flex justify-end mb-2">
+        {% if request.GET.lang == 'hi' %}
+          <a href="?lang=en" class="text-sm link-maroon">English</a>
+        {% else %}
+          <a href="?lang=hi" class="text-sm link-maroon">हिन्दी</a>
+        {% endif %}
+      </div>
+
+      <!-- Header -->
+      <div class="flex flex-col items-center mb-6 text-center">
+        <img src="{% static 'images/biharlogo.png' %}" alt="Bihar Govt Logo" class="h-16 mb-2" />
+        {% if request.GET.lang == 'hi' %}
+          <h1 class="text-xl font-bold text-maroon-800">
+            विज्ञान, प्रावैधिकी एवं तकनीकी शिक्षा विभाग<br />बिहार सरकार
+          </h1>
+          <p class="text-sm text-gray-500 mt-1">सेवा इतिहास पोर्टल</p>
+        {% else %}
+          <h1 class="text-xl font-bold text-maroon-800">
+            Department of Science, Technology & Technical Education<br />Government of Bihar
+          </h1>
+          <p class="text-sm text-gray-500 mt-1">Seva Itihas Portal</p>
+        {% endif %}
+      </div>
+
+      <!-- Messages -->
+      {% if form.errors or messages %}
+        <div class="mb-4">
+          {% for message in messages %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded text-sm mb-2">
+              {{ message }}
+            </div>
+          {% endfor %}
+          {% if form.errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded text-sm">
+              {% if request.GET.lang == 'hi' %}
+                अमान्य उपयोगकर्ता नाम या पासवर्ड। कृपया पुनः प्रयास करें।
+              {% else %}
+                Invalid username or password. Please try again.
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <!-- Admin login form -->
+      <form action="{% url 'admin:login' %}" method="post" class="space-y-4" id="login-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next|default:'/' }}">
+
+        <div>
+          <label class="block text-gray-700 text-sm mb-1">
+            {% if request.GET.lang == 'hi' %}उपयोगकर्ता नाम{% else %}Username{% endif %}
+          </label>
+          <input type="text" name="username" autofocus autocomplete="username"
+                 class="w-full rounded-lg border-gray-300 focus-maroon">
+        </div>
+
+        <div>
+          <label class="block text-gray-700 text-sm mb-1">
+            {% if request.GET.lang == 'hi' %}पासवर्ड{% else %}Password{% endif %}
+          </label>
+          <input type="password" name="password" autocomplete="current-password"
+                 class="w-full rounded-lg border-gray-300 focus-maroon">
+        </div>
+
+        <button type="submit"
+                class="w-full bg-maroon-700 hover:bg-maroon-800 text-white py-2 rounded-lg font-semibold transition">
+          {% if request.GET.lang == 'hi' %}लॉगिन{% else %}Login{% endif %}
+        </button>
+      </form>
+
+      <!-- Footer -->
+      <div class="mt-6 text-center text-sm text-gray-600">
+        <a href="https://state.bihar.gov.in/dst/CitizenHome.html" class="link-maroon">
+          {% if request.GET.lang == 'hi' %}विभागीय वेबसाइट{% else %}Department Site{% endif %}
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

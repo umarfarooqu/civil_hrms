@@ -1,0 +1,8 @@
+Django==5.2.4
+PyMySQL==1.1.0
+python-dotenv==1.0.1
+django-import-export==4.2.0
+tablib[xls,xlsx]==3.5.0
+pandas==2.2.2
+openpyxl==3.1.5
+xhtml2pdf==0.2.15

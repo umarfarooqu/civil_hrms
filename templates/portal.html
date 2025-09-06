@@ -1,0 +1,139 @@
+{% extends "portal_base.html" %}
+{% load static %}
+
+{% block portal_content %}
+<div class="space-y-6">
+
+  {% if employee %}
+  <section class="rounded-2xl shadow-card overflow-hidden">
+    <div class="bg-gradient-to-r from-maroon-700 to-maroon-800 px-6 py-6 text-white">
+      <div class="flex items-start gap-5">
+        <!-- avatar -->
+        <div class="h-16 w-16 rounded-full overflow-hidden ring-2 ring-white/60 bg-white/10 flex-shrink-0">
+          {% if employee.photo %}
+            <img src="{{ employee.photo.url }}" alt="Photo" class="h-full w-full object-cover">
+          {% else %}
+            <div class="h-full w-full flex items-center justify-center text-white/70 text-xs">No photo</div>
+          {% endif %}
+        </div>
+
+        <div class="flex-1">
+          <h3 class="text-2xl font-semibold">Welcome, {{ employee.name }}</h3>
+          <p class="mt-1 text-sm text-white/90">
+            HRMS: <span class="font-semibold">{{ employee.hrms_id }}</span>
+            {% if employee.current_designation %} • {{ employee.current_designation }}{% endif %}
+            {% if employee.college_name %} • {{ employee.college_name }}{% endif %}
+          </p>
+          <div class="mt-2 flex flex-wrap gap-2 text-xs">
+            {% if employee.branch %}
+              <span class="px-2 py-1 rounded-full border border-white/60 bg-white/10">Branch: {{ employee.branch }}</span>
+            {% endif %}
+            {% if employee.present_posting %}
+              <span class="px-2 py-1 rounded-full border border-white/60 bg-white/10">Posting: {{ employee.present_posting }}</span>
+            {% endif %}
+          </div>
+          {% if not employee.photo %}
+            <div class="mt-2 text-xs text-amber-200">
+              No photo on file — please upload on your Profile page (JPEG/PNG ≤ 30 KB).
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="ml-auto">
+          <a href="{% url 'hr:employee-profile' %}"
+             class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition">
+            View Profile
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white border border-maroon-100 px-6 py-4 text-sm text-gray-600">
+      Self-edit karein (pending → admin approve). Approved items read-only dikhenge.
+    </div>
+  </section>
+  {% endif %}
+
+  <section>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+      <!-- My Profile tile (quick access to upload photo) -->
+      <a class="group rounded-xl border bg-white p-4 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition"
+         href="{% url 'hr:employee-profile' %}">
+        <div class="text-xs text-maroon-600 font-medium">Profile</div>
+        <div class="mt-1 font-semibold">My Profile</div>
+        <div class="mt-2 text-xs text-gray-500 group-hover:text-gray-600">
+          View details & upload photo (≤ 30 KB)
+        </div>
+      </a>
+
+      {% comment %} existing maroon tiles {% endcomment %}
+      <a class="group rounded-xl border bg-white p-4 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition"
+         href="/hr/portal/education/">
+        <div class="text-xs text-maroon-600 font-medium">Self Edit</div>
+        <div class="mt-1 font-semibold">Education</div>
+        <div class="mt-2 text-xs text-gray-500 group-hover:text-gray-600">UG/PG/PhD/NET</div>
+      </a>
+
+      <a class="group rounded-xl border bg-white p-4 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition"
+         href="/hr/portal/postings/">
+        <div class="text-xs text-maroon-600 font-medium">Self Edit</div>
+        <div class="mt-1 font-semibold">Postings</div>
+      </a>
+
+      <a class="group rounded-xl border bg-white p-4 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition"
+         href="/hr/portal/deputations/">
+        <div class="text-xs text-maroon-600 font-medium">Self Edit</div>
+        <div class="mt-1 font-semibold">Deputation</div>
+      </a>
+
+      <a class="group rounded-xl border bg-white p-4 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition"
+         href="/hr/portal/apar/">
+        <div class="text-xs text-maroon-600 font-medium">Self Edit</div>
+        <div class="mt-1 font-semibold">APAR</div>
+      </a>
+
+      <a class="group rounded-xl border bg-white p-4 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition"
+         href="/hr/portal/property/">
+        <div class="text-xs text-maroon-600 font-medium">Self Edit</div>
+        <div class="mt-1 font-semibold">Property Return</div>
+      </a>
+
+      <a class="group rounded-xl border bg-white p-4 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition"
+         href="/hr/portal/trainings/">
+        <div class="text-xs text-maroon-600 font-medium">Self Edit</div>
+        <div class="mt-1 font-semibold">Training</div>
+      </a>
+
+      <a class="group rounded-xl border bg-white p-4 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition"
+         href="/hr/portal/awards/">
+        <div class="text-xs text-maroon-600 font-medium">Self Edit</div>
+        <div class="mt-1 font-semibold">Awards</div>
+      </a>
+
+      <a class="group rounded-xl border bg-white p-4 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition"
+         href="/hr/portal/pay/">
+        <div class="text-xs text-maroon-600 font-medium">Self Edit</div>
+        <div class="mt-1 font-semibold">Pay Changes</div>
+      </a>
+
+      <a class="group rounded-xl border bg-white p-4 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition"
+         href="/hr/portal/increments/">
+        <div class="text-xs text-maroon-600 font-medium">Self Edit</div>
+        <div class="mt-1 font-semibold">Advance Increments</div>
+      </a>
+
+      <a class="group rounded-xl border bg-white p-4 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition"
+         href="/hr/portal/leaves/">
+        <div class="text-xs text-maroon-600 font-medium">Self Edit</div>
+        <div class="mt-1 font-semibold">Leaves</div>
+      </a>
+
+      <a class="group rounded-xl border bg-white p-4 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition"
+         href="/hr/portal/allegations/">
+        <div class="text-xs text-maroon-600 font-medium">Self Edit</div>
+        <div class="mt-1 font-semibold">Allegations</div>
+      </a>
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-2xl font-semibold mb-4">Search Employees</h1>
+<form method="get" class="grid md:grid-cols-4 gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-4">
+  <input type="text" name="hrms_id" value="{{ request.GET.hrms_id }}" placeholder="HRMS ID"
+         class="px-3 py-2 rounded-lg border border-slate-300">
+  <input type="text" name="branch" value="{{ request.GET.branch }}" placeholder="Branch"
+         class="px-3 py-2 rounded-lg border border-slate-300">
+  <input type="text" name="college" value="{{ request.GET.college }}" placeholder="College"
+         class="px-3 py-2 rounded-lg border border-slate-300">
+  <button class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold">Search</button>
+</form>
+
+<p class="text-sm text-slate-600 mb-2">{{ qs.count }} result(s)</p>
+
+<div class="overflow-auto bg-white rounded-2xl border border-slate-200 shadow-sm">
+  <table class="min-w-full text-sm">
+    <thead class="bg-slate-50 border-b border-slate-200 text-slate-600">
+      <tr>
+        <th class="text-left px-4 py-2">HRMS</th>
+        <th class="text-left px-4 py-2">Name</th>
+        <th class="text-left px-4 py-2">Designation</th>
+        <th class="text-left px-4 py-2">Branch</th>
+        <th class="text-left px-4 py-2">College</th>
+        <th class="text-left px-4 py-2">Posting</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in qs %}
+      <tr class="border-b last:border-b-0 hover:bg-slate-50">
+        <td class="px-4 py-2">{{ e.hrms_id }}</td>
+        <td class="px-4 py-2">{{ e.name }}</td>
+        <td class="px-4 py-2">{{ e.current_designation }}</td>
+        <td class="px-4 py-2">{{ e.branch }}</td>
+        <td class="px-4 py-2">{{ e.college_name }}</td>
+        <td class="px-4 py-2">{{ e.present_posting }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="px-4 py-6 text-center text-slate-500">No records</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
