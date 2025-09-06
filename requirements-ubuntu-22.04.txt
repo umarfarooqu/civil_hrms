@@ -1,0 +1,59 @@
+# === Core framework (as used in your project) ===
+Django==5.2.4            # Django 5.2 works on Python 3.10–3.13
+
+# === Database driver (MySQL/MariaDB via PyMySQL shim in civil_list/__init__.py) ===
+PyMySQL==1.1.0
+
+# === Environment variables ===
+python-dotenv==1.0.1
+
+# === Admin theme used in INSTALLED_APPS ===
+django-jazzmin           # keep unpinned to allow latest compatible release
+
+# === Import/Export in Django Admin ===
+# 4.3.6+ adds official support for Django 5.2
+django-import-export>=4.3.6
+tablib[xls,xlsx]==3.5.0
+
+# === File handling / images ===
+Pillow                   # required for ImageField
+
+# === Data export (your Excel/CSV/PDF views) ===
+pandas==2.2.2
+openpyxl==3.1.5
+xhtml2pdf==0.2.15       # pulls reportlab & html5lib
+
+# === (Optional) production helpers ===
+# gunicorn               # WSGI server for Linux deployments
+# whitenoise             # static files in production
+
+
+# === OPTIONAL EXTRAS (uncomment what you need) =================================
+# --- Production server & static files ---
+# gunicorn                 # WSGI server for Linux (use with Nginx or alone)
+# whitenoise               # Serve static files directly from Django (no Nginx needed)
+
+# --- Database alternatives (choose ONE MySQL driver) ---
+# mysqlclient              # Faster native MySQL/MariaDB driver (requires apt: libmariadb-dev build-essential)
+# psycopg2-binary          # If you switch to PostgreSQL later
+
+# --- Caching / sessions / rate limiting ---
+# redis                    # Python Redis client
+# django-redis             # Redis cache backend integration for Django
+
+# --- File storage (S3, GCS, etc.) ---
+# django-storages[boto3]   # S3-compatible storage backends
+# boto3                     # AWS SDK for Python (pulled in by the extra above)
+
+# --- Debug & developer tooling ---
+# django-debug-toolbar
+# django-extensions
+# ipython
+
+# --- CORS / APIs / DRF (only if you expose APIs) ---
+# django-cors-headers
+# djangorestframework
+
+# --- PDF alternative (nicer CSS support, heavier system deps) ---
+# weasyprint               # apt: libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libffi-dev
+# ==============================================================================
